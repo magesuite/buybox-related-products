@@ -1,0 +1,143 @@
+<?php
+/* @var $block \MageSuite\BuyboxRelatedProducts\Block\RelatedProductsBuybox */
+?>
+<?php
+    $image = 'related_products_buybox_list';
+    $title = $block->getHeadline();
+    $subTitle = $block->getSubheadline();
+    $items = $block->getItems();
+    $limit = $block->getItemsLimit();
+    $canItemsAddToCart = $block->canItemsAddToCart();
+    $showCart = $block->getShowAddtocartButton();
+    $cartLabel = $block->getAddtocartButtonLabel();
+    $showCheckbox = $block->getShowCheckbox();
+    $checkboxLabel = $block->getCheckboxLabel();
+    $showSelectAll = $block->getShowSelectAll();
+    $canDisplayRelatedProductsSection = $block->canDisplayRelatedProductsSection();
+?>
+<?php if ($canDisplayRelatedProductsSection): ?>
+    <?php if ($block->getItems()->getSize()) :?>
+        <div class="block related cs-buybox-related-products" data-mage-init='{"relatedProducts":{"relatedCheckbox":".related.checkbox","selectAllLink":".cs-buybox-related-products__select-all"}}' data-limit="<?= $block->escapeHtmlAttr($limit) ?>" data-shuffle="0">
+            <div class="cs-buybox-related-products__header">
+                <?php if($title): ?>
+                    <div class="block-title title cs-buybox-related-products__headline">
+                        <strong id="block-related-heading" role="heading" aria-level="2"><?= $block->escapeHtml($title) ?></strong>
+                    </div>
+                <?php endif; ?>
+
+                <?php if($subTitle): ?>
+                    <div class="block-subtitle subtitle cs-buybox-related-products__subheadline"><?= $block->escapeHtml($subTitle) ?></div>
+                <?php endif; ?>
+
+                <?php if ($canItemsAddToCart && $showSelectAll && $block->getItems()->getSize() > 1) :?>
+                    <div class="block-actions cs-buybox-related-products__actions">
+                        <button type="button" class="action select cs-buybox-related-products__select-all" data-role="select-all"><span><?= $block->escapeHtml(__('select all')) ?></span></button>
+                    </div>
+                <?php endif; ?>
+            </div>
+
+            <div class="block-content content cs-buybox-related-products__content" aria-labelledby="block-related-heading">
+                <div class="products wrapper grid products-grid products-related cs-buybox-related-products__list-wrapper">
+                    <ol class="products list items product-items cs-buybox-related-products__list">
+                        <?php foreach ($items as $_item) :?>
+                            <?php $available = ''; ?>
+
+                            <?php if (!$_item->isComposite() && $_item->isSaleable()) :?>
+                                <?php if (!$_item->getRequiredOptions()) :?>
+                                    <?php $available = 'related-available'; ?>
+                                <?php endif; ?>
+                            <?php endif; ?>
+
+                            <li class="item product product-item cs-buybox-related-products__item" style="display: none;">
+                                <div class="product-item-info <?= /* @noEscape */ $available ?> cs-buybox-related-products__item-content">
+                                    <?php if($canItemsAddToCart && $showCheckbox): ?>
+                                        <div class="field choice related cs-buybox-related-products__checkbox-wrapper">
+                                            <?php if (!$_item->isComposite() && $_item->isSaleable() && !$_item->getRequiredOptions()) :?>
+                                                <input type="checkbox" class="checkbox related cs-buybox-related-products__checkbox" id="related-checkbox<?= $block->escapeHtmlAttr($_item->getId()) ?>" name="related_products[]" value="<?= $block->escapeHtmlAttr($_item->getId()) ?>" />
+                                                <?php if($checkboxLabel): ?>
+                                                    <label class="label cs-buybox-related-products__checkbox-label" for="related-checkbox<?= $block->escapeHtmlAttr($_item->getId()) ?>"><span><?= $block->escapeHtml($checkboxLabel) ?></span></label>
+                                                <?php endif; ?>
+                                            <?php endif; ?>
+                                        </div>
+                                    <?php endif; ?>
+
+                                    <?= /* @noEscape */ '<!-- ' . $image . '-->' ?>
+                                    <a href="<?= $block->escapeUrl($block->getProductUrl($_item)) ?>" class="product photo product-item-photo cs-buybox-related-products__image">
+                                        <?= $block->getImage($_item, $image)->toHtml() ?>
+                                        <?= $block->getChildHtml('buybox.related.after.image') ?>
+                                    </a>
+
+                                    <div class="product details product-item-details cs-buybox-related-products__item-details-wrapper">
+                                        <div class="cs-buybox-related-products__item-details">
+                                            <a class="product-item-link cs-buybox-related-products__item-name" title="<?= $block->escapeHtmlAttr($_item->getName()) ?>" href="<?= $block->escapeUrl($block->getProductUrl($_item)) ?>">
+                                                <?= $block->escapeHtml($_item->getName()) ?>
+                                            </a>
+
+                                            <?= $block->getChildHtml('buybox.related.additional.product.details') ?>
+                                        </div>
+
+                                        <div class="cs-buybox-related-products__price">
+                                            <?= /* @noEscape */ $block->getProductPrice($_item) ?>
+                                            <?= $block->getChildHtml('buybox.related.after.price') ?>
+                                        </div>
+                                    </div>
+
+                                    <?php if ($canItemsAddToCart && !$_item->isComposite() && $_item->isSaleable()) :?>
+                                        <?php if (!$_item->getRequiredOptions() && $showCart) :?>
+                                            <div class="product actions product-item-actions cs-buybox-related-products__item-actions">
+                                                <?php if ($showCart) :?>
+                                                    <div class="actions-primary cs-buybox-related-products__primary-actions">
+                                                        <?php if ($_item->isSaleable()) :?>
+                                                            <?php if ($_item->getTypeInstance()->hasRequiredOptions($_item)) :?>
+                                                                <button class="action tocart primary cs-buybox-related-products__atc-button" data-mage-init='{"redirectUrl": {"url": "<?= $block->escapeUrl($block->getAddToCartUrl($_item)) ?>"}}' type="button" title="<?= $block->escapeHtmlAttr($cartLabel) ?>">
+                                                                    <span><?= $block->escapeHtml($cartLabel) ?></span>
+                                                                    <?= $block->getChildHtml('buybox.related.atc.icon') ?>
+                                                                </button>
+                                                            <?php else :?>
+                                                                <?php $postDataHelper = $this->helper(Magento\Framework\Data\Helper\PostHelper::class);
+                                                                $postData = $postDataHelper->getPostData($block->escapeUrl($block->getAddToCartUrl($_item)), ['product' => $_item->getEntityId()])
+                                                                ?>
+                                                                <button class="action tocart primary cs-buybox-related-products__atc-button"
+                                                                        data-post='<?= /* @noEscape */ $postData ?>'
+                                                                        type="button" title="<?= $block->escapeHtmlAttr($cartLabel) ?>">
+                                                                    <span><?= $block->escapeHtml($cartLabel) ?></span>
+                                                                    <?= $block->getChildHtml('buybox.related.atc.icon') ?>
+                                                                </button>
+                                                            <?php endif; ?>
+                                                        <?php else :?>
+                                                            <?php if ($_item->getIsSalable()) :?>
+                                                                <div class="stock available cs-buybox__stock cs-buybox__stock--available cs-buybox-related-products__stock cs-buybox-related-products__stock--available">
+                                                                    <span class="cs-buybox__stock-text">
+                                                                        <?= $block->getChildHtml('buybox.related.in.stock.icon') ?>
+                                                                        <?= $block->escapeHtml(__('In stock')) ?>
+                                                                    </span>
+                                                                </div>
+                                                            <?php else :?>
+                                                                <div class="stock unavailable cs-buybox__stock cs-buybox__stock--unavailable cs-buybox-related-products__stock cs-buybox-related-products__stock--unavailable">
+                                                                    <span class="cs-buybox__stock-text">
+                                                                        <?= $block->getChildHtml('buybox.related.out.of.stock.icon') ?>
+                                                                        <?= $block->escapeHtml(__('Out of stock')) ?>
+                                                                    </span>
+                                                                </div>
+                                                            <?php endif; ?>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                <?php endif; ?>
+
+                                                <?php if (!empty($addToBlock = $block->getChildBlock('addto'))): ?>
+                                                    <div class="secondary-addto-links actions-secondary cs-buybox-related-products__addtolinks" data-role="add-to-links">
+                                                        <?= $addToBlock->setProduct($_item)->getChildHtml() ?>
+                                                    </div>
+                                                <?php endif; ?>
+                                            </div>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
+                                </div>
+                            </li>
+                        <?php endforeach ?>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    <?php endif;?>
+<?php endif;?>
