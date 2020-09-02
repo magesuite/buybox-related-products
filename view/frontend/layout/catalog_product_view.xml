@@ -1,8 +1,7 @@
 <?xml version="1.0"?>
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
-        <referenceContainer name="product.info.main" htmlTag="div" htmlClass="product-info-main cs-buybox">
-            <container name="product.info.main.section.form" htmlTag="div" htmlClass="cs-buybox__section cs-buybox__section--product-form" />
+        <referenceContainer name="product.info.main">
             <container name="product.info.main.section.afterform" htmlTag="div" htmlClass="cs-buybox__section cs-buybox__section--afterform">
                 <block class="MageSuite\BuyboxRelatedProducts\Block\RelatedProductsBuybox" name="product.info.buybox.related" template="MageSuite_BuyboxRelatedProducts::product/view/buybox-related.phtml" after="-">
                     <arguments>
@@ -18,8 +17,5 @@
                 </block>
             </container>
         </referenceContainer>
-
-        <move element="product.info.type" destination="product.info.main.section.form" before="product.info.buybox.related" />
-        <move element="product.info" destination="product.info.main.section.form" before="-" />
     </body>
 </page>
