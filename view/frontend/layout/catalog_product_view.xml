@@ -17,5 +17,6 @@
                 </block>
             </container>
         </referenceContainer>
+        <move element="product.info.main.section.afterform" destination="product.info.main" after="product.info.main.section.form" />
     </body>
 </page>
