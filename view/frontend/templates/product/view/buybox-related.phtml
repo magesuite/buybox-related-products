@@ -1,19 +1,19 @@
 <?php
 /* @var $block \MageSuite\BuyboxRelatedProducts\Block\RelatedProductsBuybox */
 ?><?php
-$image = 'related_products_buybox_list';
-$title = $block->getHeadline();
-$subTitle = $block->getSubheadline();
-$items = $block->getItems();
-$limit = $block->getItemsLimit();
-$canItemsAddToCart = $block->canItemsAddToCart();
-$showCart = $block->getShowAddtocartButton();
-$cartLabel = $block->getAddtocartButtonLabel();
-$showCheckbox = $block->getShowCheckbox();
-$checkboxLabel = $block->getCheckboxLabel();
-$showSelectAll = $block->getShowSelectAll();
-$canDisplayRelatedProductsSection = $block->canDisplayRelatedProductsSection();
-?><?php if ($canDisplayRelatedProductsSection):?>inside
+    $image = 'related_products_buybox_list';
+    $title = $block->getHeadline();
+    $subTitle = $block->getSubheadline();
+    $items = $block->getItems();
+    $limit = $block->getItemsLimit();
+    $canItemsAddToCart = $block->canItemsAddToCart();
+    $showCart = $block->getShowAddtocartButton();
+    $cartLabel = $block->getAddtocartButtonLabel();
+    $showCheckbox = $block->getShowCheckbox();
+    $checkboxLabel = $block->getCheckboxLabel();
+    $showSelectAll = $block->getShowSelectAll();
+    $canDisplayRelatedProductsSection = $block->canDisplayRelatedProductsSection();
+?><?php if ($canDisplayRelatedProductsSection):?>
     <?php if ($block->getItems()->getSize()) :?>
         <div class="block related cs-buybox-related-products" data-mage-init='{"relatedProducts":{"relatedCheckbox":".related.checkbox","selectAllLink":".cs-buybox-related-products__select-all"}}' data-limit="<?= $block->escapeHtmlAttr($limit) ?>" data-shuffle="0">
             <div class="cs-buybox-related-products__header">
